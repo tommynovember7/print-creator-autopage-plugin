@@ -20,20 +20,20 @@
   },
   "desktop": {
     "js": [
-      "https://print.kintoneapp.com/autopage-plugin/desktop.js"
+      "https://print.kintoneapp.com/autopage-plugin/desktop.min.js"
     ],
     "css": [
-      "https://print.kintoneapp.com/autopage-plugin/desktop.css"
+      "https://print.kintoneapp.com/autopage-plugin/desktop.min.css"
     ]
   },
   "config": {
     "html": "html/config.html",
     "js": [
-      "https://print.kintoneapp.com/autopage-plugin/config.js"
+      "https://print.kintoneapp.com/autopage-plugin/config.min.js"
     ],
     "css": [
       "https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css",
-      "https://print.kintoneapp.com/autopage-plugin/config.css"
+      "https://print.kintoneapp.com/autopage-plugin/config.min.css"
     ],
     "required_params": ["appCode"]
   }

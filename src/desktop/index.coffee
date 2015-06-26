@@ -12,11 +12,9 @@ do ->
   css.load config.css
 
   params = kintone.plugin.app.getConfig(config.pluginId)
-  u.log 'params:', params
   config.appCode = params.appCode
   config.showSheets = JSON.parse params.showSheets
   config.autoSheets = JSON.parse params.autoSheets
-  u.log 'params:', config
 
   # Single PDF
   kintone.events.on 'app.record.detail.show', (event) ->

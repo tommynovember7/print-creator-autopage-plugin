@@ -1,4 +1,4 @@
-Print Creator Plugin
+Print Creator AutoPage-Plugin
 ===================
 
 概要
