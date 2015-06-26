@@ -1,4 +1,7 @@
 <div class="form-group">
+  <button type="button" class="btn btn-default right" v-on="click : remove">
+    <i class="fa fa-times"></i>
+  </button>
   <div class="form-group">
     <label>テーブルの選択</label>
     <select v-model="tableField" class="form-control w400" options="tableFieldOptions"></select>
@@ -10,8 +13,5 @@
         <div v-component="sub-sheet"></div>
       </div>
     </div>
-    <button type="button" class="btn btn-default" v-on="click : remove">
-      <i class="fa fa-times"></i>
-    </button>
   </div>
 </div>

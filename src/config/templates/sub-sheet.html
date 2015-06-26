@@ -11,10 +11,10 @@
     <label>帳票</label>
     <select v-model="sheet" class="form-control" options="sheetOptions"></select>
   </div>
-  <button type="button" class="btn btn-default" v-if="isLast" v-on="click : add">
+  <button type="button" class="btn btn-success" v-if="isLast" v-on="click : add">
     <i class="fa fa-plus"></i>
   </button>
-  <button type="button" class="btn btn-default" v-if="isNotFirst" v-on="click : remove">
+  <button type="button" class="btn btn-danger" v-if="isNotFirst" v-on="click : remove">
     <i class="fa fa-times"></i>
   </button>
 </div>
