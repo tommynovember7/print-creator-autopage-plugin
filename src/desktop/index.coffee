@@ -24,8 +24,8 @@ do ->
     event
 
   # Batch PDF @todo
-#  kintone.events.on 'app.record.index.show', (event) ->
-#    $head = $ kintone.app.getHeaderMenuSpaceElement()
-#    $head.append Batch.createDOM()
-#
-#    event
+  kintone.events.on 'app.record.index.show', (event) ->
+    $head = $ kintone.app.getHeaderMenuSpaceElement()
+    $head.append Batch.createDOM()
+
+    event
