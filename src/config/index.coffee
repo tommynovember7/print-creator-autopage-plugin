@@ -8,7 +8,7 @@ Vue.config.debug = config.debug
 
 Main = Vue.extend
   template: require './templates/index.html'
-  data:
+  data: ->
       appCode: null
       sheets: []
       showSheets: []
