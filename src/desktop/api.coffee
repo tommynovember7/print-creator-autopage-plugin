@@ -1,20 +1,25 @@
-request = require 'superagent'
-config  = require './config'
-u       = require './utils'
+$      = global.jQuery
+config = require './config'
+u      = require './utils'
 
 module.exports =
-  fetchSheets: (isIndex, callback) ->
-    request
-    .get(u.makeUrl "api/v1/ext-sheets/?appCode=#{config.appCode}&isIndex=#{isIndex}")
-    .end((err, res) ->
-      if callback? and res?.body?
-        callback err, res.body
-    )
-  packPdf: (data, callback) ->
+  fetchSheets: (appCode, isIndex, callback) ->
+    $.ajax
+      type: "GET"
+      url: u.makeUrl "api/v1/ext-sheets/?appCode=#{appCode}&isIndex=#{isIndex}"
+      dataType: "json"
+      success: (resp) ->
+        callback resp
+      error: (resp, status, thrown) ->
+        u.log "error:", resp
+  packPdf: (appCode, data, callback) ->
     jsonData = JSON.stringify(data)
-    request
-    .get(u.makeUrl "api/v1/pack-pdf/?data=#{jsonData}&appCode=#{config.appCode}")
-    .end((err, res) ->
-      if callback? and res?.body?
-        callback err, res.body
-    )
+    $.ajax
+      type: "GET"
+      url: u.makeUrl "api/v1/pack-pdf/?data=#{jsonData}&appCode=#{appCode}"
+      dataType: "json"
+      success: (resp) ->
+        alert resp.message
+      error: (resp, status, thrown) ->
+        u.log "error:", resp
+        alert resp.responseJSON.error.message
