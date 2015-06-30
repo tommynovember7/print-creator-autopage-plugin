@@ -29,7 +29,7 @@ var createTask = function(entries, dest){
         .pipe(source(dest + ".js"))
         .pipe(buffer())
         .pipe(gulp.dest(config.destDir))
-        //.pipe(uglify()) @todo commet out
+        .pipe(uglify())
         .pipe(rename({suffix: '.min'}))
         .pipe(gulp.dest(config.destDir))
         .on('end', bundleLogger.end);
