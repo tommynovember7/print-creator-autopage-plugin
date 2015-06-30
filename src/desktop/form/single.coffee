@@ -19,7 +19,8 @@ Single =
     $form.appendTo $container
 
     # add sheets
-    api.fetchSheets 0, (err, sheets) ->
+    api.fetchSheets config.appCode, 0, (sheets) ->
+      u.log 'sheets:', sheets
       showSheets = _.filter sheets, (sheet) ->
         $.inArray("#{sheet.id}", config.showSheets) >= 0
 
@@ -46,7 +47,7 @@ Single =
       if autoSheet? and record.record[autoSheet.tableField]?.value?.length?
           l = record.record[autoSheet.tableField]?.value.length
           sub = _.find autoSheet.subSheets, (s) ->
-            s.from <= l and s.to > l
+            +s.from <= l and +s.to > l
           sheetId = sub.sheet
           url = u.makeUrl "sheet/#{sheetId}/output?appCode=#{config.appCode}"
 

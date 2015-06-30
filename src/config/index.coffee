@@ -54,7 +54,7 @@ Main = Vue.extend
         @fetchSheets @appCode
 
     fetchSheets: (appCode) ->
-      api.fetchSheets appCode, false, (err, sheets) =>
+      api.fetchSheets appCode, false, (sheets) =>
         @$set 'sheets', sheets
 
     addAutoSheet: ->
@@ -90,8 +90,8 @@ Main = Vue.extend
     @$set 'showSheets', (if params.showSheets? then JSON.parse params.showSheets else [] )
     @$set 'autoSheets', (if params.autoSheets? then JSON.parse params.autoSheets else [] )
 
-    if @appCode?
-      @fetchSheets @appCode
+    if config.appCode?
+      @fetchSheets config.appCode
 
     kintone.api kintone.api.url('/k/v1/form', true), 'GET', {app: kintone.app.getId()}, (res) ->
       thisVM.$set 'kintoneFields', res.properties

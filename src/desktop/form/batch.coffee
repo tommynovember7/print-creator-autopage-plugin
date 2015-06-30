@@ -16,7 +16,7 @@ module.exports =
     $form.appendTo $container
 
     # add sheets
-    api.fetchSheets 1, (err, sheets) ->
+    api.fetchSheets config.appCode, 1, (sheets) ->
       u.log 'sheets:', sheets
       for sheet in sheets
         $op = $ "<option value=\"#{sheet.id}\">#{sheet.title}</option>"
@@ -47,7 +47,7 @@ module.exports =
             if res.records.length
               alert (t._ 'invalid_query')
             else if confirm (t._ 'confirm_sending')
-              api.packPdf data, (err, res) ->
+              api.packPdf config.appCode, data, (err, res) ->
                 u.log 'pack-pdf:', res
                 if res.message?
                   alert res.message
