@@ -47,7 +47,10 @@ Single =
       if autoSheet? and record.record[autoSheet.tableField]?.value?.length?
           l = record.record[autoSheet.tableField]?.value.length
           sub = _.find autoSheet.subSheets, (s) ->
-            +s.from <= l and +s.to > l
+            +s.from <= l and +s.to >= l
+          if not sub?
+            alert l + "行に当たる設定がありません"
+            return false
           sheetId = sub.sheet
           url = u.makeUrl "sheet/#{sheetId}/output?appCode=#{config.appCode}"
 
