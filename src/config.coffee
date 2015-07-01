@@ -1,6 +1,6 @@
 module.exports =
   debug:      false
-  baseUrl:    'https://print.kintoneapp.local/app_dev.php'
+  baseUrl:    'https://print.kintoneapp.com'
   pluginId:   'kgbcggkkcaehbcfohccjchbnkjoenpoh'
   appCode:    null
   showSheets: []
