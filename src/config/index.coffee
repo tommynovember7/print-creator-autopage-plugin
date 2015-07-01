@@ -1,8 +1,9 @@
+require '../browser-deps'
 Vue    = require 'vue'
 _      = require 'lodash'
-api    = require './api'
-config = require './config'
-u      = require './utils'
+api    = require '../components/print-creator/api'
+config = require '../config'
+u      = require '../utils'
 
 Vue.config.debug = config.debug
 
@@ -36,22 +37,8 @@ Main = Vue.extend
   methods:
     changeAppCode: (event) ->
       appCode = event.target.value
-      @checkAppCode appCode
-      if @appCode?
-        @fetchSheets @appCode
-
-    checkAppCode: (appCode) ->
-      data = {
-        appCode: appCode
-        appId: kintone.app.getId()
-      }
-      u.log "checkAppCode:data:", data
-
-      api.checkAppCode data, (err, res) =>
-        u.log "checkAppCode:posted:", res
-        u.log "checkAppCode:err", err
-        kintone.plugin.app.setConfig({'appCode': appCode})
-        @fetchSheets @appCode
+      if appCode?
+        @fetchSheets appCode
 
     fetchSheets: (appCode) ->
       api.fetchSheets appCode, false, (sheets) =>

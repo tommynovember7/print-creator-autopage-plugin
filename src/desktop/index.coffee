@@ -1,15 +1,11 @@
-require './browser-deps'
-u      = require './utils'
-css    = require './load-css'
-config = require './config'
+require '../browser-deps'
+config = require '../config'
 Single = require './form/single'
 Batch  = require './form/batch'
 $      = global.jQuery
 
 do ->
   'use strict'
-
-  css.load config.css
 
   params = kintone.plugin.app.getConfig(config.pluginId)
   config.appCode = params.appCode

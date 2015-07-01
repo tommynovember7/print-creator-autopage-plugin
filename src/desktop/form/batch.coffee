@@ -1,8 +1,8 @@
 $      = global.jQuery
-u      = require '../utils'
+u      = require '../../utils'
 t      = require '../i18n'
-api    = require '../api'
-config = require '../config'
+api    = require '../../components/print-creator/api'
+config = require '../../config'
 
 module.exports =
   createDOM: ->

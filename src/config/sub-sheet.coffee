@@ -1,6 +1,6 @@
 Vue = require 'vue'
 _   = require 'lodash'
-u   = require './utils'
+u   = require '../utils'
 
 SubSheet = Vue.extend
   template: require './templates/sub-sheet.html'
