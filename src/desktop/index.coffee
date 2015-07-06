@@ -2,7 +2,9 @@ require '../browser-deps'
 config = require '../config'
 Single = require './form/single'
 Batch  = require './form/batch'
+api    = require '../components/print-creator/api'
 $      = global.jQuery
+u      = require '../utils'
 
 do ->
   'use strict'
@@ -21,7 +23,13 @@ do ->
 
   # Batch PDF @todo
   kintone.events.on 'app.record.index.show', (event) ->
-    $head = $ kintone.app.getHeaderMenuSpaceElement()
-    $head.append Batch.createDOM()
+
+    api.fetchSheets(config.appCode, 1, (sheets) ->
+      $head = $ kintone.app.getHeaderMenuSpaceElement()
+      $head.append Batch.createDOM()
+    , (resp, status, thrown) ->
+      if resp?.responseJSON?.error?.message?
+        u.log resp.responseJSON.error.message
+    )
 
     event
