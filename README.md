@@ -16,6 +16,34 @@ Print Creator AutoPage-Plugin
 3. レコード詳細ページから自動改ページしてPDF出力
 4. ＠TODO レコード一覧から検索条件にマッチするレコードを500件まで自動改ページしてPDF出力
 
+早く開発を開始したい人用のドキュメント
+------------
+
+### インストールから開発開始までの手順
+
+プラグインを新たにパッケージする場合
+
+- `git clone`
+- `npm install`
+- `npm run build`
+- `./gulp/config.js` -> `pluginKey` を生成した key のパスに書き換える.
+- `./src/config.coffee` -> `pluginId` を生成した key に書き換える.
+- `npm run watch`
+- ブラウザから, https://localhost:8000 にアクセス出来るようにする.
+- 開発開始
+
+既存のプラグインを修正する場合
+
+- `git clone`
+- 既存プラグインの key を `./keys` に置く
+- `npm install`
+- `./gulp/config.js` -> `pluginKey` を既存プラグインの key のパスに書き換える.
+- `./src/config.coffee` -> `pluginId` を既存プラグインの key に書き換える.
+- `npm run watch`
+- ブラウザから, https://localhost:8000 にアクセス出来るようにする.
+- 開発開始
+
+
 インストール
 ------------
 
@@ -41,15 +69,15 @@ brewを使っていない場合は, [これ](http://qiita.com/is0me/items/475fdb
 WindowsでNode.jsを利用する場合, [nodist](https://github.com/marcelklehr/nodist)が便
 利です[これ](http://qiita.com/Kackey/items/b41b11bcf1c0b0d76149#windows%E7%B7%A8)
 とかを参考にインストールしてください.
-インストール後は, 以下のコマンドでnodeのバージョンをv0.12.0にしてください.
+インストール後は, 以下のコマンドでnodeのバージョンを指定してください.
 
 ``` {.bash}
   nodist + v0.12.0
   nodist v0.12.0
 ```
 
-※Windowsの場合, node-sassのインストールでエラーが起きる場合があります.
-node-sassを先にインストールしてからnpm installすると解決する場合があります.
+※Windowsの場合, node-sassのインストールでエラーが起きる場合があります. node-sassを先にイ
+ンストールしてからnpm installすると解決する場合があります.
 
 ### 依存ライブラリのインストール
 
@@ -74,7 +102,9 @@ node-sassを先にインストールしてからnpm installすると解決する
 使い方
 ------------
 
-### 初期設定
+### プラグイン開発
+
+#### 新規プラグインの場合
 
 新規開発の場合は, １度ビルドする必要がある
 
@@ -85,12 +115,31 @@ node-sassを先にインストールしてからnpm installすると解決する
 以下のconfigファイルを編集する必要がある.
 
 ```
-    src/print-creator/config.coffee
+    src/config.coffee
 ```
 
-pluginKeyに, 生成されたppkファイルのパスを指定する.
+`./src/config.coffee` -> `pluginId` を生成した key に書き換える.
 
-既存プラグインの場合は, ppkファイルをプロジェクト配下に置き, そのパスを指定する
+#### 既存プラグインの場合
+
+既存プラグインの場合は, ppkファイルを `./keys` 配下に置きそのパスを指定する. 初期状態として,
+開発用の key が `./gulp/config.js` -> `pluginKey` と`./src/config.coffee` ->
+`pluginId` に指定されているので, 本番用に別の key を使う場合は変更が必要.
+
+#### 開発設定
+
+`plugin/manifest.json`は localhost をサーバーとしてリソースを読み込む設定になっている.
+本番用にパッケージする時は, リソースのパスを変更する.
+
+Debug 時には `src/config.coffee` の debug を true に設定すると良い.
+
+#### 本番プラグインのパッケージ化
+
+- `plugin/manifest.json` のリソースのパスを本番用に変更する.
+- 本番用に別の key を使う場合
+    - `./gulp/config.js` -> `pluginKey` を本番用の key のパスに書き換える.
+    - `./src/config.coffee` -> `pluginId` を本番用の key に書き換える.
+- `npm run build` を実行する.
 
 ### JavaScriptやSASSのビルド
 
@@ -111,7 +160,8 @@ Gulp タスクが幾つか用意されている.
 
 #### Watch
 
-開発時に, ファイルの変更を検知して, ビルド + ライブリロードなどといったことを自動的に行ってく
+開発時に, ファイルの変更を検知して, ビルド + ライブリロード +
+ローカルサーバーの起動 + Pluginのパッケージ化などといったことを自動的に行ってく
 れるタスクが用意されている.
 
 監視プロセスを立ち上げるためには以下のコマンドを実行する.
@@ -119,6 +169,11 @@ Gulp タスクが幾つか用意されている.
 ``` {.bash}
   npm run watch
 ```
+
+ローカルサーバーは正式な証明書をもってないので, https://localhost:8000 にアクセス出来る必
+要がある. Chrome の場合は一度アクセスし, `詳細設定` ->
+`https://localhost:8000にアクセスする` をクリックするとアクセスできるようになる.
+
 
 ライセンス
 ------------
