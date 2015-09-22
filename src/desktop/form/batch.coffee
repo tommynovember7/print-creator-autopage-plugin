@@ -1,29 +1,37 @@
 $      = global.jQuery
+_      = require 'lodash'
 u      = require '../../utils'
 t      = require '../i18n'
 api    = require '../../components/print-creator/api'
 config = require '../../config'
 
-module.exports =
+Batch =
+  canSubmit: false
   createDOM: ->
     # create dom
     $container = $('<div class="pcreator-container"></div>')
     $select = $('<select class="pcreator-sheets-select"></select>')
-    $form = $('<form method="POST"></form>')
+    $form = $('<form method="POST" target="_blank"></form>')
+    $data = $('<input type="hidden" name="data" value=""/>')
     $submit = $('<input type="submit" value=\"' + (t._ 'output') + '\" />')
+    $data.appendTo $form
     $submit.appendTo $form
     $select.appendTo $container
     $form.appendTo $container
 
     # add sheets
-    api.fetchSheets config.appCode, 1, (sheets) ->
+    api.fetchSheets config.appCode, 0, (sheets) ->
       u.log 'sheets:', sheets
-      for sheet in sheets
+      showSheets = _.filter sheets, (sheet) ->
+        $.inArray("#{sheet.id}", config.showSheets) >= 0
+
+      _.forEach showSheets, (sheet) ->
         $op = $ "<option value=\"#{sheet.id}\">#{sheet.title}</option>"
         $select.append $op
         $select.removeAttr "disabled"
         $submit.removeAttr "disabled"
-      if sheets.length  is 0
+
+      if showSheets.length  is 0
         $op = $ "<option value=\"\">" + (t._ 'sheets_not_exist') + "</option>"
         $select.append $op
         $select.attr disabled: "disabled"
@@ -33,26 +41,51 @@ module.exports =
     $form.submit ->
       data = {}
       data.user = kintone.getLoginUser()
-      data.query = kintone.app.getQueryCondition()
-      data.ledgerSheetId = $select.val()
+      sheetId = $select.val()
+      autoSheet = _.find config.autoSheets, (s) ->
+        +s.subSheets[0].sheet is +sheetId
+      url = u.makeUrl "sheet/#{sheetId}/output/multi?appCode=#{config.appCode}"
 
       if !data.user.email
         alert (t._ 'unknown_email')
-      else
-        kintone.api kintone.api.url('/k/v1/records', true),
-          'GET',
-          app: kintone.app.getId()
-          query: kintone.app.getQueryCondition() + (" limit 1 offset 501"),
-          (res) ->
-            if res.records.length
-              alert (t._ 'invalid_query')
-            else if confirm (t._ 'confirm_sending')
-              api.packPdf config.appCode, data, (err, res) ->
-                u.log 'pack-pdf:', res
-                if res.message?
-                  alert res.message
-                else if res.error?
-                  alert res.error.message
+        return false
+      if Batch.canSubmit
+        Batch.canSubmit = false
+        return true
+
+      kintone.api kintone.api.url('/k/v1/records', true),
+        'GET',
+        app: kintone.app.getId()
+        query: kintone.app.getQueryCondition() + (" limit 1 offset 501"),
+        (res) ->
+          if res.records.length
+            alert (t._ 'invalid_query')
+            return false
+
+          kintone.api kintone.api.url('/k/v1/records', true),
+            'GET',
+            app: kintone.app.getId()
+            query: kintone.app.getQuery(),
+            (res) ->
+              u.log 'records:', res.records
+              data.records = res.records
+              _.each data.records, (r) ->
+                if autoSheet? and r[autoSheet.tableField]?.value?.length?
+                  l = r[autoSheet.tableField]?.value.length
+                  sub = _.find autoSheet.subSheets, (s) ->
+                    +s.from <= l and +s.to >= l
+                  if not sub?
+                    alert l + "行に当たる設定がありません"
+                    return false
+                  r.pcLedgerSheetId = sub.sheet
+
+              $form.attr('action', url)
+              data.user = kintone.getLoginUser()
+              $data.val JSON.stringify(data)
+              Batch.canSubmit = true
+              $form.submit()
       false
 
     $container
+
+module.exports = Batch

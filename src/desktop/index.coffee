@@ -21,7 +21,7 @@ do ->
 
     event
 
-  # Batch PDF @todo
+  # Batch PDF
   kintone.events.on 'app.record.index.show', (event) ->
 
     api.fetchSheets(config.appCode, 1, (sheets) ->
