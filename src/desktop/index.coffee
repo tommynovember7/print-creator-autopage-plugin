@@ -23,13 +23,13 @@ do ->
 
   # Batch PDF
   kintone.events.on 'app.record.index.show', (event) ->
-
-    api.fetchSheets(config.appCode, 1, (sheets) ->
-      $head = $ kintone.app.getHeaderMenuSpaceElement()
-      $head.append Batch.createDOM()
-    , (resp, status, thrown) ->
-      if resp?.responseJSON?.error?.message?
-        u.log resp.responseJSON.error.message
-    )
+    $head = $ kintone.app.getHeaderMenuSpaceElement()
+    if not $head.children(".pcreator-container").length
+      api.fetchSheets(config.appCode, 1, (sheets) ->
+        $head.append Batch.createDOM()
+      , (resp, status, thrown) ->
+        if resp?.responseJSON?.error?.message?
+          u.log resp.responseJSON.error.message
+      )
 
     event
