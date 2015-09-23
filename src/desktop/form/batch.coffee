@@ -65,7 +65,7 @@ Batch =
           kintone.api kintone.api.url('/k/v1/records', true),
             'GET',
             app: kintone.app.getId()
-            query: kintone.app.getQuery().replace(/limit ([0-9]+)/, 'limit 500'),
+            query: kintone.app.getQuery().replace(/limit ([0-9]+)/, 'limit 500').replace(/offset ([0-9]+)/, 'offset 0'),
             (res) ->
               u.log 'records:', res.records
               data.records = res.records
