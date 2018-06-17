@@ -4742,7 +4742,7 @@ button.close {
 .pull-left {
   float: left !important; }
 
-.hide {
+.pcreator-container .hide {
   display: none !important; }
 
 .show {
